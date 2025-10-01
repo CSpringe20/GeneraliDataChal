@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def main():
-    file_root = Path("./data challenge/data challenge/")
+    file_root = Path("./data")
     cliente_file = file_root / "cliente.csv"
     polizze_file = file_root / "polizze.csv"
     preventivi_file = file_root / "preventivi.csv"
