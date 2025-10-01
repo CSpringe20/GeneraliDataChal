@@ -43,7 +43,7 @@ def retrieve_ground_truth(user_information : dict, df : pd.DataFrame, garancies_
     (df["flag_cane"] == user_information["flag_cane"]) &
     (df["flag_solo"] == user_information["flag_solo"]) &
     (df["flag_altre_siztuazioni"] == user_information["flag_altre_siztuazioni"]), 
-    ["prev"]].values[0]
+    ["id_polizza"]].values[0]
     print(id_preventivo)
     # -- Garancies retrieval --
     garancies = garancies_df.loc[
