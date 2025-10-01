@@ -16,7 +16,7 @@ def retrieve_ground_truth(user_information : dict, df : pd.DataFrame, garancies_
     """
         Retrieve gt from an user information.
         User information are stored as dict with the following format:
-            id, anno_nascita, cod_sesso, cod_provincia_residenza, valore_personale_veicolo, num_utilizzatori, classe_assegnazione_stessa_scala, flag_automia, flag_motomia, flag_bicimia, flag_autosharing, flag_motosharing, flag_bicisharing, flag_mezzipubblici, flag_piedi, flag_partent, flag_figli, flag_cane, flag_solo, flag_altre_situazioni 
+            anno_nascita, cod_sesso, cod_provincia_residenza, valore_personale_veicolo, num_utilizzatori, classe_assegnazione_stessa_scala, flag_automia, flag_motomia, flag_bicimia, flag_autosharing, flag_motosharing, flag_bicisharing, flag_mezzipubblici, flag_piedi, flag_partent, flag_figli, flag_cane, flag_solo, flag_altre_situazioni 
         The df contaians user informations plus the accepted preventiv id.
         The preventiv df link the preventiv to what garancies are included in that preventiv.
         It returns the vector representation of the ground truth in term of garancies offered in a preventiv.
@@ -43,7 +43,7 @@ def retrieve_ground_truth(user_information : dict, df : pd.DataFrame, garancies_
     (df["flag_cane"] == user_information["flag_cane"]) &
     (df["flag_solo"] == user_information["flag_solo"]) &
     (df["flag_altre_siztuazioni"] == user_information["flag_altre_siztuazioni"]), 
-    ["id_polizza"]].values[0]
+    ["numero_preventivo"]].values[0]
     print(id_preventivo)
     # -- Garancies retrieval --
     garancies = garancies_df.loc[
