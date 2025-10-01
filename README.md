@@ -32,6 +32,11 @@ Once users are represented in this space, we can use KNN to find each new user's
 │ └── svd.py
 ├── *LICENSE*
 └── *README.md*
+
 ## Quick usage
 
 > Insert here the snippet of code for the app usage.
+
+## TODO 
+
+[ ] Adding requirements.txt
