@@ -40,3 +40,4 @@ Once users are represented in this space, we can use KNN to find each new user's
 ## TODO 
 
 [ ] Adding requirements.txt
+[ ] Adding the proper wrapper from the backend to the streamlit frontend
