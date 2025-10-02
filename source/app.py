@@ -1,24 +1,21 @@
-import time
-
 import pandas as pd
 import streamlit as st
-from engine import engine
-import random
+from engine import recommend_coverages as engine
+
 
 st.set_page_config(page_title="Generali Data Challenge", layout="wide")
 
 # ---- HEADER ----
-
-# center the title
 st.markdown("<h1 style='text-align: center;'>🦁 Generali Data Challenge 🦁</h1>", unsafe_allow_html=True)
 st.markdown("---")
 
 st.markdown("## New Insurance Application")
 st.markdown("Please fill in the form below with your personal information, or insert a CSV file.")
 
-result = ""
 
 # ---- FORM ----
+result = ""
+
 with st.expander("➕ Insert your data", expanded=False):
     with st.form("my_form"):
 
@@ -52,12 +49,12 @@ with st.expander("➕ Insert your data", expanded=False):
             valore_personale_veicolo = st.number_input("Valore Personale Veicolo", min_value=1, max_value=3, placeholder=1)
             num_utilizzatori = st.number_input("Numero Utilizzatori", min_value=1, max_value=10, placeholder=1)
             classe_assegnazione_stessa_scala = st.number_input("Classe Assegnazione Stessa Scala", min_value=1, max_value=18, placeholder=1)
-            flag_autonomia = st.selectbox("Sei il proprietario dell'auto?", options=['Si', 'No'], index=1)
+            flag_automia = st.selectbox("Sei il proprietario dell'auto?", options=['Si', 'No'], index=1)
             flag_motomia = st.selectbox("Sei un motociclista?", options=['Si', 'No'], index=1)
             flag_bicimia = st.selectbox("Sei un ciclista?", options=['Si', 'No'], index=1)
             flag_autosharing = st.selectbox("Usi servizi di car sharing?", options=['Si', 'No'], index=1)
             flag_motosharing = st.selectbox("Usi servizi di moto sharing?", options=['Si', 'No'], index=1)
-            flag_bikesharing = st.selectbox("Usi servizi di bike sharing?", options=['Si', 'No'], index=1)
+            flag_bicisharing = st.selectbox("Usi servizi di bike sharing?", options=['Si', 'No'], index=1)
             flag_mezzipubblici = st.selectbox("Usi mezzi pubblici?", options=['Si', 'No'], index=1)
             flag_piedi = st.selectbox("Ti sposti a piedi?", options=['Si', 'No'], index=1)
             flag_partner = st.selectbox("Hai un partner?", options=['Si', 'No'], index=1)
@@ -69,23 +66,57 @@ with st.expander("➕ Insert your data", expanded=False):
             submit_button = st.form_submit_button(label="Submit")
 
             if submit_button:
-                if not name or not surname or not anno_nascita or not email or not phone or not address:
-                    st.warning("Please fill in the form or upload a CSV file.")
+                # Validazione minima
+                if not name or not surname:
+                    st.warning("Please fill in at least name and surname.")
                 else:
-                    st.success("Form submitted successfully!")
-                    df = pd.DataFrame([anno_nascita, cod_sesso, cod_provincia_residenza, num_utilizzatori, classe_assegnazione_stessa_scala, valore_personale_veicolo, anni_assicurati, anni_assicurati_continuativi. flag_autonomia, flag_motomia, flag_bicimia, flag_autosharing, flag_motosharing, flag_bicisharing, flag_mezzipubblici, flag_piedi, flag_partner, flag_figli, flag_cane, flag_solo, flag_altre_situazioni])
-                    result = engine(df)
+                    # Normalizza cod_sesso da UI (Maschio / Femmina → lowercase)
+                    cod_sesso_raw = cod_sesso  # ad esempio proviene da selectbox ["Maschio","Femmina"]
+                    cod_sesso_norm = cod_sesso_raw.strip().lower()  # “Maschio” -> “maschio”, “Femmina” -> “femmina”
+
+                    # Costruisci la riga con tutte le colonne attese
+                    new_row = {
+                        "anno_nascita": int(anno_nascita),
+                        "cod_sesso": cod_sesso_norm,
+                        "cod_provincia_residenza": cod_provincia_residenza.strip(),  # potrebbe voler normalizzare anche gli spazi
+                        "num_utilizzatori": int(num_utilizzatori),
+                        "classe_assegnazione_stessa_scala": int(classe_assegnazione_stessa_scala),
+                        "valore_personale_veicolo": int(valore_personale_veicolo),
+                        "anni_assicurati": int(anni_assicurati),
+                        "anni_assicurati_continuativi": int(anni_assicurati_continuativi),
+
+
+                        # Tutte le flag come “Si” / “No” normali
+                        # convert yes/no into 1/0
+                        "flag_automia": flag_automia.strip().lower(),
+                        "flag_automia": flag_automia.strip().lower(),
+                        "flag_motomia": flag_motomia.strip().lower(),
+                        "flag_bicimia": flag_bicimia.strip().lower(),
+                        "flag_autosharing": flag_autosharing.strip().lower(),
+                        "flag_motosharing": flag_motosharing.strip().lower(),
+                        "flag_bicisharing": flag_bicisharing.strip().lower(),
+                        "flag_mezzipubblici": flag_mezzipubblici.strip().lower(),
+                        "flag_piedi": flag_piedi.strip().lower(),
+                        "flag_partner": flag_partner.strip().lower(),
+                        "flag_figli": flag_figli.strip().lower(),
+                        "flag_cane": flag_cane.strip().lower(),
+                        "flag_solo": flag_solo.strip().lower(),
+                        "flag_altre_situazioni": flag_altre_situazioni.strip().lower()
+                    }
+
+                    # Crea un DataFrame con una sola riga
+                    df_new = pd.DataFrame([new_row])
+
+                    # Chiama la tua funzione engine / recommend_coverages
+                    try:
+                        result = engine(df_new)
+                    except Exception as e:
+                        st.error(f"Error in engine: {e}")
 
 # --- RESULTS ----
 if result != "":
-    batch_result = ['001','171','G07', 'G09', '172', '057', '065', '067']
-    result = random.sample(batch_result, 3)
-
     st.markdown("## Results")
     st.markdown("Based on the information provided, here are your insurance quotes:")
-
-    # introduce some sleep time to simulate processing
-    time.sleep(1)
 
     for i in range(len(result)):
         # empty space
