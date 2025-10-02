@@ -16,7 +16,7 @@ This is conceptually similar to how LSI (Latent Semantic Indexing) works in info
 Once users are represented in this space, we can use KNN to find each new user's closest neighbors and leverage their coverage choices to generate personalized recommendations.
 
 ## Folder structures
-
+```
 **GeneraliDataChal**
 ├── **Data**
 │ ├── garanzie.csv
@@ -32,7 +32,7 @@ Once users are represented in this space, we can use KNN to find each new user's
 │ └── svd.py
 ├── *LICENSE*
 └── *README.md*
-
+```
 ## Quick usage
 
 > Insert here the snippet of code for the app usage.
