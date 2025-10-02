@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import TruncatedSVD
 from sklearn.neighbors import NearestNeighbors
 from collections import Counter
+import matplotlib.pyplot as plt
 
 num_data = 10000  # select only the first num_data rows
 k = 10            # num of dimensions to keep in svd
@@ -100,7 +101,35 @@ def evaluate_recommender(X_test, y_test, num_nn=5, num_cov_ret=5):
         scores.append(jaccard_similarity(y_true, y_pred))
     return np.mean(scores)
 
+import matplotlib.pyplot as plt
+
+def plot_svd_components(X_emb, y=None, title="SVD 2D Projection"):
+    """
+    Plot the first two components of the SVD embedding.
+
+    Parameters:
+        X_emb : ndarray, shape (n_samples, n_components)
+            The SVD-transformed features.
+        y : list/Series/ndarray (optional)
+            Labels to color points.
+        title : str
+            Title of the plot.
+    """
+    plt.figure(figsize=(8,6))
+    if y is not None:
+        plt.scatter(X_emb[:,0], X_emb[:,1], c=y, cmap="viridis", s=10, alpha=0.7)
+    else:
+        plt.scatter(X_emb[:,0], X_emb[:,1], s=10, alpha=0.7)
+    
+    plt.xlabel("SVD Component 1")
+    plt.ylabel("SVD Component 2")
+    plt.title(title)
+    plt.savefig("svd_plot.png", dpi=300, bbox_inches="tight")
+    plt.show()
+
+
 
 if __name__=="__main__":
     mean_jaccard = evaluate_recommender(X_test, y_test, num_nn=num_nn, num_cov_ret=num_cov_ret)
     print(f"Mean Jaccard similarity on test set: {mean_jaccard:.4f}")
+    plot_svd_components(X_train_emb, title="Train set SVD projection")
