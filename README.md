@@ -17,21 +17,21 @@ Once users are represented in this space, we can use KNN to find each new user's
 
 ## Folder structures
 ```
-**GeneraliDataChal**
-├── **Data**
+GeneraliDataChal
+├── DATA
 │ ├── garanzie.csv
 │ └── merged_table.csv
-├── Slide
+├── SLIDE
 │ └── 20250612_Data_challenge_TS - ENG.pdf
-├── **Source**
+├── SOURCE
 │ ├── app.py
 │ ├── dataloader.py
 │ ├── engine.py
 │ ├── enginee.py
 │ ├── evaluation.py
 │ └── svd.py
-├── *LICENSE*
-└── *README.md*
+├── LICENSE
+└── README.md
 ```
 ## Quick usage
 
